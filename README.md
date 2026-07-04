@@ -50,3 +50,67 @@ Skill text is converted into numerical vectors using `TfidfVectorizer`:
 
 **3. Cosine Similarity**
 The model computes the cosine similarity between the student's skill vector and each job role's skill vector:
+This produces a value between 0.0 and 1.0, scaled to a 0–100% match score.
+
+**4. Readiness Prediction**
+Missing skills are extracted via set subtraction (`Required_Skills − Student_Skills`), mapped to estimated learning hours from a reference dataset, and converted into a timeline:
+
+```python
+weeks_needed = math.ceil(total_learning_hours / study_hours_per_week)
+```
+
+---
+
+## Architecture
+
+The application follows an MVC-inspired separation of concerns:
+
+| Layer | File | Responsibility |
+|---|---|---|
+| Model | `model.py` | All ML logic — data loading, vectorization, similarity scoring, chart JSON generation. No Flask code. |
+| Controller | `app.py` | HTTP routing, form validation, error handling, flash messaging, database operations. |
+| View | `templates/` | Jinja2 templates styled with Bootstrap 5. |
+
+### Database Schema (`database.db`)
+
+| Column | Type | Description |
+|---|---|---|
+| `id` | INTEGER | Primary key |
+| `timestamp` | TEXT | Time of prediction |
+| `company` | TEXT | Target company |
+| `role` | TEXT | Target job role |
+| `match_pct` | REAL | Cosine similarity match score |
+| `missing_skills` | TEXT | JSON-serialized list of missing skills |
+| `weeks_needed` | INTEGER | Predicted readiness timeline (weeks) |
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Python 3.10+
+- pip
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/placement-readiness-predictor.git
+cd placement-readiness-predictor
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the application
+python app.py
+```
+
+Then open **http://127.0.0.1:5000/** in your browser.
+
+---
+
+## Roadmap
+
+- **Resume Parsing (NLP)** — Integrate PyMuPDF and spaCy to auto-extract skills from uploaded resumes.
+- **Live Job Data** — Replace static CSVs with a connected job-postings API for real-time requirement updates.
+- **AI-Generated Learning Paths** — Use an LLM to produce a personalized, week-by-week syllabus for each missing skill.
