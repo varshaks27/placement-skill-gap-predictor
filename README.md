@@ -12,11 +12,13 @@
 
 ## Overview
 
-During campus placements, students often struggle to answer a deceptively simple question: *"How far am I from being industry-ready?"* They may know basic Python or SQL, but have no structured way to map that knowledge against the specific stacks demanded by recruiters at companies like TCS, Infosys, or Accenture.
+During campus placements, students often struggle to answer a deceptively simple question: "How far am I from being industry-ready?" They may know basic Python or SQL, but have no structured way to map that knowledge against the specific stacks demanded by recruiters at companies like TCS, Infosys, or Accenture.
 
-This project solves that problem with a data-driven approach. It compares a student's self-reported skill set against aggregated job requirements using natural language processing, then returns a quantified match score, a ranked list of missing skills, and a realistic timeline to close the gap.
+This project solves that problem with a data-driven approach. It compares a student's self-reported skill set against aggregated job requirements using natural language processing, then returns a quantified match score, a ranked list of missing skills, and a realistic timeline to close the gap. Missing skills are extracted via set subtraction between required and possessed skills, mapped to estimated learning hours, and converted into a timeline using `weeks_needed = ceil(total_learning_hours / study_hours_per_week)`.
 
-### Objectives
+---
+
+## Objectives
 
 | Goal | Approach |
 |---|---|
@@ -38,79 +40,50 @@ This project solves that problem with a data-driven approach. It compares a stud
 
 ---
 
-## Machine Learning Pipeline
+## Tech Stack
 
-**1. Data Preprocessing**
-Raw skill strings are sanitized with targeted regular expressions that strip non-essential characters while preserving meaningful technical symbols (e.g., `C++`, `C#`, `.NET`), then normalized into space-separated tokens.
-
-**2. TF-IDF Vectorization**
-Skill text is converted into numerical vectors using `TfidfVectorizer`:
-- **Term Frequency (TF)** — how often a skill appears.
-- **Inverse Document Frequency (IDF)** — down-weights common terms (e.g., "communication") and up-weights distinctive technical skills.
-
-**3. Cosine Similarity**
-The model computes the cosine similarity between the student's skill vector and each job role's skill vector:
-This produces a value between 0.0 and 1.0, scaled to a 0–100% match score.
-
-**4. Readiness Prediction**
-Missing skills are extracted via set subtraction (`Required_Skills − Student_Skills`), mapped to estimated learning hours from a reference dataset, and converted into a timeline:
-
-```python
-weeks_needed = math.ceil(total_learning_hours / study_hours_per_week)
-```
+| Layer | Technology |
+|---|---|
+| Backend | Python, Flask |
+| Machine Learning | scikit-learn (TF-IDF, Cosine Similarity) |
+| Database | SQLite |
+| Visualization | Plotly |
+| Frontend | HTML, CSS, Bootstrap 5 |
 
 ---
 
-## Architecture
+## Project Workflow
 
-The application follows an MVC-inspired separation of concerns:
-
-| Layer | File | Responsibility |
-|---|---|---|
-| Model | `model.py` | All ML logic — data loading, vectorization, similarity scoring, chart JSON generation. No Flask code. |
-| Controller | `app.py` | HTTP routing, form validation, error handling, flash messaging, database operations. |
-| View | `templates/` | Jinja2 templates styled with Bootstrap 5. |
-
-### Database Schema (`database.db`)
-
-| Column | Type | Description |
-|---|---|---|
-| `id` | INTEGER | Primary key |
-| `timestamp` | TEXT | Time of prediction |
-| `company` | TEXT | Target company |
-| `role` | TEXT | Target job role |
-| `match_pct` | REAL | Cosine similarity match score |
-| `missing_skills` | TEXT | JSON-serialized list of missing skills |
-| `weeks_needed` | INTEGER | Predicted readiness timeline (weeks) |
+1. Student enters their current skill set and target company/role.
+2. Skills are cleaned and normalized using regex-based preprocessing.
+3. Both student and job-role skills are vectorized using TF-IDF.
+4. Cosine similarity is computed to generate a match percentage.
+5. Missing skills are identified via set subtraction against the required skill set.
+6. A readiness timeline is calculated based on the student's weekly study capacity.
+7. Results are visualized through Plotly charts and logged to the SQLite database.
 
 ---
 
-## Getting Started
+## Learning Outcomes
 
-### Prerequisites
-- Python 3.10+
-- pip
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/placement-readiness-predictor.git
-cd placement-readiness-predictor
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the application
-python app.py
-```
-
-Then open **http://127.0.0.1:5000/** in your browser.
+- Gained practical experience applying TF-IDF vectorization and cosine similarity to a real-world NLP problem.
+- Learned to design an MVC-inspired Flask architecture with a clear separation between ML logic and web routing.
+- Strengthened skills in data preprocessing, including regex-based text sanitization.
+- Built experience integrating Plotly visualizations into a Flask front end.
+- Improved understanding of database design for tracking historical predictions in SQLite.
 
 ---
 
-## Roadmap
+## Future Enhancements
 
 - **Resume Parsing (NLP)** — Integrate PyMuPDF and spaCy to auto-extract skills from uploaded resumes.
 - **Live Job Data** — Replace static CSVs with a connected job-postings API for real-time requirement updates.
 - **AI-Generated Learning Paths** — Use an LLM to produce a personalized, week-by-week syllabus for each missing skill.
+
+---
+
+## Author
+
+**Varsha KS**
+B.Tech Computer Science Engineering
+Mangalam College of Engineering
