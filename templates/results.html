@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Results — {{ student_name }} | SkillGap AI</title>
+  <meta name="description" content="Placement readiness results for {{ student_name }} targeting {{ role }} at {{ company }}." />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
+  <!-- html2pdf.js for client-side PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+<!-- ── Navigation ─────────────────────────────────────────────────────────── -->
+<nav class="navbar navbar-dark navbar-expand-lg glass-nav sticky-top">
+  <div class="container">
+    <a class="navbar-brand brand-logo" href="/">
+      <i class="bi bi-graph-up-arrow me-2 text-primary-accent"></i>
+      SkillGap <span class="text-primary-accent">AI</span>
+    </a>
+    <div class="ms-auto d-flex align-items-center gap-3">
+      <a href="/" class="nav-link"><i class="bi bi-house me-1"></i>Predict</a>
+      <a href="/history" class="nav-link"><i class="bi bi-clock-history me-1"></i>History</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero Banner ────────────────────────────────────────────────────────── -->
+<section class="results-hero py-4">
+  <div class="container text-center">
+    <div class="hero-badge mb-2">
+      <i class="bi bi-bar-chart-fill me-2"></i>Analysis Complete
+    </div>
+    <h1 class="hero-title fs-2 mb-1">
+      {{ student_name }}'s <span class="gradient-text">Placement Report</span>
+    </h1>
+    <p class="text-muted">
+      <i class="bi bi-building me-1"></i>{{ company }} &nbsp;•&nbsp;
+      <i class="bi bi-briefcase me-1"></i>{{ role }}
+    </p>
+    <div class="mt-3">
+      
+    </div>
+  </div>
+</section>
+
+<div class="container pb-5">
+
+  <!-- ── Row 1: Stat Cards ──────────────────────────────────────────────── -->
+  <div class="row g-3 mb-4">
+
+    <!-- Skill Coverage -->
+    <div class="col-sm-6 col-lg-3">
+      <div class="stat-card animate-in" style="--delay: 0.05s" data-bs-toggle="tooltip" data-bs-placement="top" title="Skill Coverage = Skills You Know ÷ Skills Required × 100. This is the same number shown in the Pie Chart and Company Comparison.">
+        <div class="stat-icon"><i class="bi bi-bullseye"></i></div>
+        <div class="stat-value text-{{ readiness_class }}">{{ match_pct }}%</div>
+        <div class="stat-label">Skill Coverage</div>
+      </div>
+    </div>
+
+    <!-- Missing Skills -->
+    <div class="col-sm-6 col-lg-3">
+      <div class="stat-card animate-in" style="--delay: 0.1s">
+        <div class="stat-icon text-warning"><i class="bi bi-exclamation-triangle-fill"></i></div>
+        <div class="stat-value text-warning">{{ timeline.missing_skills | length }}</div>
+        <div class="stat-label">Skills to Learn</div>
+      </div>
+    </div>
+
+    <!-- Total Hours -->
+    <div class="col-sm-6 col-lg-3">
+      <div class="stat-card animate-in" style="--delay: 0.15s">
+        <div class="stat-icon text-info"><i class="bi bi-hourglass-split"></i></div>
+        <div class="stat-value text-info">{{ timeline.total_learning_hours }}h</div>
+        <div class="stat-label">Total Learning Hours</div>
+      </div>
+    </div>
+
+    <!-- Weeks Needed -->
+    <div class="col-sm-6 col-lg-3">
+      <div class="stat-card animate-in" style="--delay: 0.2s" data-bs-toggle="tooltip" data-bs-placement="top" title="Formula: ceil(Total Hours ÷ Study Hours/Week)">
+        <div class="stat-icon text-primary-accent"><i class="bi bi-calendar-check"></i></div>
+        <div class="stat-value text-primary-accent">{{ timeline.weeks_needed }}w</div>
+        <div class="stat-label">Weeks to Ready</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Readiness Badge & Timeline Transparency ──────────────────────────── -->
+  <div class="text-center mb-4 animate-in" style="--delay: 0.22s">
+    <span class="readiness-pill bg-{{ readiness_class }} mb-3 d-inline-block">
+      {{ readiness_label }}
+    </span>
+    
+    <div class="timeline-formula mx-auto p-3 text-start shadow-sm" style="max-width: 450px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
+      <h6 class="text-primary-accent mb-3"><i class="bi bi-calculator me-2"></i>Prediction Calculation</h6>
+      <div class="d-flex justify-content-between text-muted small mb-2">
+        <span>Total Learning Hours</span> 
+        <span><strong class="text-white">{{ timeline.total_learning_hours }}</strong> hours</span>
+      </div>
+      <div class="d-flex justify-content-between text-muted small mb-3 pb-3 border-bottom border-secondary">
+        <span>Study Hours per Week</span> 
+        <span><strong class="text-white">{{ study_hours }}</strong> hours/wk</span>
+      </div>
+      <div class="d-flex justify-content-between small">
+        <span class="text-muted">Predicted Readiness</span> 
+        <span class="text-white">ceil({{ timeline.total_learning_hours }} ÷ {{ study_hours }}) = <strong>{{ timeline.weeks_needed }} weeks</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Row 2: Charts ──────────────────────────────────────────────────── -->
+  <div class="row g-4 mb-4">
+
+    <!-- Gauge -->
+    <div class="col-lg-5">
+      <div class="glass-card h-100 animate-in" style="--delay: 0.25s">
+        <div class="card-header-custom">
+          <i class="bi bi-speedometer2 me-2 text-primary-accent"></i>Skill Match Score
+          <i class="bi bi-info-circle ms-2" data-bs-toggle="tooltip" title="Semantic Match % using TF-IDF. Measures context, not just keyword count."></i>
+        </div>
+        <div class="card-body p-2">
+          <div id="gaugeChart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Donut -->
+    <div class="col-lg-3">
+      <div class="glass-card h-100 animate-in" style="--delay: 0.3s">
+        <div class="card-header-custom">
+          <i class="bi bi-pie-chart-fill me-2 text-primary-accent"></i>Skills Breakdown
+          <i class="bi bi-info-circle ms-2" data-bs-toggle="tooltip" title="Raw count of required vs known keywords based on dataset exactly."></i>
+        </div>
+        <div class="card-body p-2">
+          <div id="donutChart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats sidebar -->
+    <div class="col-lg-4">
+      <div class="glass-card h-100 animate-in" style="--delay: 0.35s">
+        <div class="card-header-custom d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-info-circle me-2 text-primary-accent"></i>Quick Summary</span>
+          <span class="badge bg-dark border border-secondary" data-bs-toggle="tooltip" title="Prediction Confidence Score based on data density.">
+            <i class="bi bi-shield-check text-success me-1"></i>{{ timeline.confidence_score }}%
+          </span>
+        </div>
+        <div class="card-body p-3">
+          <div class="summary-item">
+            <span class="summary-key">Company</span>
+            <span class="summary-val">{{ company }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-key">Role</span>
+            <span class="summary-val">{{ role }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-key">Required Skills</span>
+            <span class="summary-val">{{ required_skills | length }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-key">You Know</span>
+            <span class="summary-val text-success">{{ timeline.already_known | length }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-key">To Learn</span>
+            <span class="summary-val text-danger">{{ timeline.missing_skills | length }}</span>
+          </div>
+          <div class="summary-item mb-2">
+            <span class="summary-label">Target Pace:</span>
+            <span class="summary-val text-white">{{ study_hours }} hrs/week</span>
+          </div>
+
+
+          
+          <!-- Progress bar -->
+          <div class="mt-3">
+            <small class="text-muted d-flex justify-content-between">
+              <span>Match Progress</span><span>{{ match_pct }}%</span>
+            </small>
+            <div class="progress mt-1" style="height:10px; border-radius:8px; background:rgba(255,255,255,0.08)">
+              <div
+                class="progress-bar progress-bar-animated"
+                role="progressbar"
+                style="width: {{ match_pct }}%; background: linear-gradient(90deg, #6366f1, #a78bfa);"
+                aria-valuenow="{{ match_pct }}"
+                aria-valuemin="0"
+                aria-valuemax="100">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Row 3: Advanced Charts ─────────────────────────────────────────── -->
+  <div class="row g-4 mb-4">
+    <!-- Radar Chart -->
+    <div class="col-lg-5">
+      <div class="glass-card h-100 animate-in" style="--delay: 0.38s">
+        <div class="card-header-custom">
+          <i class="bi bi-hexagon-fill me-2 text-primary-accent"></i>Skill Category Radar
+        </div>
+        <div class="card-body p-2">
+          <div id="radarChart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Bar Chart: Missing Skills ──────────────────────────────────────── -->
+    <div class="col-lg-7">
+      {% if timeline.missing_skills %}
+      <div class="glass-card h-100 animate-in" style="--delay: 0.4s">
+        <div class="card-header-custom">
+          <i class="bi bi-bar-chart-line-fill me-2 text-primary-accent"></i>
+          Missing Skills — Learning Hours Required
+        </div>
+        <div class="card-body p-2">
+          <div id="barChart"></div>
+        </div>
+      </div>
+      {% else %}
+      <div class="glass-card h-100 d-flex align-items-center justify-content-center animate-in" style="--delay: 0.4s">
+        <h5 class="text-success"><i class="bi bi-check-circle-fill me-2"></i>No missing skills!</h5>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- ── Already Known Skills ───────────────────────────────────────────── -->
+  {% if timeline.already_known %}
+  <div class="glass-card mb-4 animate-in" style="--delay: 0.45s">
+    <div class="card-header-custom">
+      <i class="bi bi-patch-check-fill me-2 text-success"></i>
+      Skills You Already Have
+    </div>
+    <div class="card-body p-3">
+      <div class="d-flex flex-wrap gap-2">
+        {% for s in timeline.already_known %}
+        <span class="skill-pill skill-known">
+          <i class="bi bi-check2-circle me-1"></i>{{ s.title() }}
+        </span>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ── Study Plan Breakdown Table ────────────────────────────────────── -->
+  {% if timeline.breakdown %}
+  <div class="glass-card mb-4 animate-in" style="--delay: 0.5s">
+    <div class="card-header-custom">
+      <i class="bi bi-journal-text me-2 text-primary-accent"></i>
+      Study Plan
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-dark table-hover mb-0 custom-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Skill</th>
+              <th>Difficulty</th>
+              <th>Learning Hours</th>
+              <th>Est. Weeks (at {{ study_hours }}h/wk)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in timeline.breakdown %}
+            <tr>
+              <td class="text-muted">{{ loop.index }}</td>
+              <td><strong>{{ item.skill.title() }}</strong></td>
+              <td>
+                {% if item.difficulty_weight == 1 %}
+                  <span class="badge-difficulty bg-success">Easy</span>
+                {% elif item.difficulty_weight == 2 %}
+                  <span class="badge-difficulty bg-warning text-dark">Medium</span>
+                {% else %}
+                  <span class="badge-difficulty bg-danger">Hard</span>
+                {% endif %}
+              </td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <div class="mini-bar" style="width: {{ [item.learning_hours * 1.5, 120] | min }}px;
+                    background: {% if item.difficulty_weight == 1 %}#4ade80{% elif item.difficulty_weight == 2 %}#facc15{% else %}#f87171{% endif %};"></div>
+                  <span>{{ item.learning_hours }}h</span>
+                </div>
+              </td>
+              <td>~{{ ((item.learning_hours / study_hours) | round(1)) }} wk</td>
+            </tr>
+            {% endfor %}
+            <!-- Totals row -->
+            <tr class="totals-row">
+              <td></td>
+              <td><strong>Total</strong></td>
+              <td></td>
+              <td><strong>{{ timeline.total_learning_hours }}h</strong></td>
+              <td><strong>{{ timeline.weeks_needed }} weeks</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ── Dynamic Week-by-Week Roadmap ───────────────────────────────────── -->
+  {% if timeline.roadmap %}
+  <div class="glass-card mb-4 animate-in" style="--delay: 0.51s">
+    <div class="card-header-custom">
+      <i class="bi bi-calendar-range me-2 text-primary-accent"></i>
+      Week-by-Week Learning Roadmap
+    </div>
+    <div class="card-body p-4">
+      <div class="timeline-container">
+        {% for week in timeline.roadmap %}
+        <div class="timeline-week-card mb-3 p-3 rounded bg-dark-opacity border border-secondary shadow-sm">
+          <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom border-secondary">
+            <h6 class="text-primary-accent mb-0"><i class="bi bi-calendar-event me-2"></i>Week {{ week.week }}</h6>
+            <span class="badge bg-dark border border-secondary">{{ week.skills | map(attribute='hours') | sum | round(1) }} hours scheduled</span>
+          </div>
+          <div class="d-flex flex-wrap gap-2">
+            {% for sk in week.skills %}
+            <span class="skill-pill bg-dark border border-secondary text-light-accent p-2 rounded d-flex align-items-center">
+              <i class="bi bi-clock me-2 text-muted"></i>
+              <strong>{{ sk.skill.title() }}</strong>&nbsp;({{ sk.hours }} hrs)
+            </span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  
+
+  <!-- ── Company Comparison (All 7 Placement Companies) ─────────────────── -->
+  <div class="glass-card mb-4 animate-in" style="--delay: 0.52s">
+    <div class="card-header-custom d-flex justify-content-between align-items-center">
+      <span><i class="bi bi-buildings me-2 text-primary-accent"></i>Company Match Comparison</span>
+      <span class="badge bg-secondary">7 Companies Tracked</span>
+    </div>
+    <div class="card-body p-3">
+      <div class="row align-items-center">
+        <!-- Chart -->
+        <div class="col-lg-8 mb-4 mb-lg-0">
+          <div id="compareChart"></div>
+        </div>
+        <!-- Ranking Table -->
+        <div class="col-lg-4">
+          <h6 class="mb-3 text-white">Overall Ranking</h6>
+          <div class="table-responsive">
+            <table class="table table-dark table-hover table-sm custom-table mb-0">
+              <thead>
+                <tr>
+                  <th class="text-white">Rank</th>
+                  <th>Company</th>
+                  <th class="text-end">Match</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for comp in all_companies %}
+                <tr {% if comp.company == company %}class="table-active"{% endif %}>
+                  <td class="text-white">#{{ loop.index }}</td>
+                  <td>
+                    {% if comp.company == company %}
+                      <strong><i class="bi bi-arrow-right-short text-primary-accent"></i> {{ comp.company }}</strong>
+                    {% else %}
+                      {{ comp.company }}
+                    {% endif %}
+                  </td>
+                  <td class="text-end">
+                    <span class="badge {% if comp.match_percentage >= 75 %}bg-success{% elif comp.match_percentage >= 40 %}bg-warning text-dark{% else %}bg-danger{% endif %}">
+                      {{ comp.match_percentage }}%
+                    </span>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CTA Buttons ────────────────────────────────────────────────────── -->
+  <div class="text-center animate-in" style="--delay: 0.55s">
+    <a href="/" class="btn btn-predict btn-lg me-3">
+      <i class="bi bi-arrow-repeat me-2"></i>Try Another Role
+    </a>
+    <a href="/history" class="btn btn-outline-secondary btn-lg">
+      <i class="bi bi-clock-history me-2"></i>View History
+    </a>
+  </div>
+
+</div>
+
+<!-- ── Footer ─────────────────────────────────────────────────────────────── -->
+<footer class="footer-custom text-center py-4 mt-5">
+  <small class="text-muted">
+    SkillGap AI &mdash; Placement Readiness Predictor &bull;
+    Formula: Total Learning Hours ÷ Study Hours/Week = Predicted Weeks
+  </small>
+</footer>
+
+<!-- Plotly CDN -->
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Inject Plotly chart data from Flask/Jinja2
+  const gaugeData   = {{ charts.gauge_json   | safe }};
+  const barData     = {{ charts.bar_json     | safe }};
+  const donutData   = {{ charts.donut_json   | safe }};
+  const compareData = {{ charts.compare_json | safe }};
+  const radarData   = {{ charts.radar_json   | safe }};
+
+  const cfg = { responsive: true, displayModeBar: false };
+
+  Plotly.newPlot("gaugeChart", gaugeData.data, gaugeData.layout, cfg);
+  Plotly.newPlot("donutChart", donutData.data, donutData.layout, cfg);
+  
+  if (radarData && radarData.data) {
+    Plotly.newPlot("radarChart", radarData.data, radarData.layout, cfg);
+  }
+  
+  if (compareData && compareData.data) {
+    Plotly.newPlot("compareChart", compareData.data, compareData.layout, cfg);
+  }
+
+  {% if timeline.missing_skills %}
+  Plotly.newPlot("barChart", barData.data, barData.layout, cfg);
+  {% endif %}
+
+  // Initialize Bootstrap tooltips
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+  // PDF Export Logic using html2pdf.js
+  function exportReportToPDF() {
+    // Select element to print (excluding action buttons/navbar to look professional)
+    const element = document.querySelector('.container.pb-5');
+    
+    const options = {
+      margin:       0.5,
+      filename:     'Placement_Readiness_Report_{{ student_name }}.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#0f172a' },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+    
+    // Hide print controls temporary
+    const printButtons = document.querySelector('.results-hero .mt-3');
+    const ctaButtons = document.querySelector('.text-center.animate-in');
+    
+    if (printButtons) printButtons.style.display = 'none';
+    if (ctaButtons) ctaButtons.style.display = 'none';
+    
+    html2pdf().set(options).from(element).save().then(() => {
+      // Restore buttons visibility
+      if (printButtons) printButtons.style.display = 'block';
+      if (ctaButtons) ctaButtons.style.display = 'block';
+    }).catch(err => {
+      console.error(err);
+      if (printButtons) printButtons.style.display = 'block';
+      if (ctaButtons) ctaButtons.style.display = 'block';
+      alert("Failed to export PDF: " + err.message);
+    });
+  }
+</script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

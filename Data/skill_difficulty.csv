@@ -1,0 +1,74 @@
+skill,difficulty_weight,estimated_learning_hours
+python,1,20
+java,2,35
+c++,2,30
+javascript,1,20
+sql,1,15
+html,1,8
+css,1,10
+react,2,30
+node.js,2,28
+flask,1,12
+django,2,25
+spring boot,3,40
+hibernate,2,20
+rest apis,1,12
+graphql,2,22
+docker,2,25
+kubernetes,3,45
+aws,3,50
+azure,3,45
+gcp,3,48
+git,1,8
+linux,2,20
+bash scripting,2,18
+power bi,2,20
+tableau,2,22
+excel,1,10
+data modeling,2,25
+machine learning,3,60
+deep learning,3,75
+natural language processing,3,65
+computer vision,3,70
+pandas,1,15
+numpy,1,12
+scikit-learn,2,25
+tensorflow,3,50
+pytorch,3,55
+data structures,2,30
+algorithms,2,35
+system design,3,55
+object oriented programming,2,25
+design patterns,2,30
+agile,1,10
+jira,1,6
+selenium,2,20
+postman,1,8
+api testing,1,12
+manual testing,1,10
+penetration testing,3,50
+ethical hacking,3,60
+network security,3,55
+siem,3,40
+mongodb,2,20
+postgresql,2,22
+mysql,1,15
+redis,2,20
+elasticsearch,3,35
+kafka,3,40
+spark,3,45
+hadoop,3,50
+airflow,2,30
+dax,2,20
+requirements gathering,1,10
+power automate,2,18
+maven,1,8
+gradle,1,8
+typescript,2,20
+vue.js,2,25
+angular,2,28
+android development,3,60
+kotlin,2,30
+swift,3,45
+r,2,25
+matlab,2,30

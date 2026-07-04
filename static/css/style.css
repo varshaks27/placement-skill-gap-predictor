@@ -1,0 +1,497 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   style.css  —  SkillGap AI Design System
+   Dark-mode glassmorphism theme with gradient accents
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Google Fonts fallback already loaded via HTML <link> ── */
+
+/* ─── 1. CSS Custom Properties ─────────────────────────────────────────────── */
+:root {
+  --bg-deep:       #0a0b14;
+  --bg-surface:    #11131f;
+  --bg-elevated:   #181b2e;
+  --glass-bg:      rgba(255, 255, 255, 0.04);
+  --glass-border:  rgba(255, 255, 255, 0.09);
+  --glass-shadow:  0 8px 32px rgba(0, 0, 0, 0.45);
+
+  --accent-primary:  #6366f1;   /* indigo */
+  --accent-violet:   #a78bfa;   /* violet */
+  --accent-cyan:     #22d3ee;   /* cyan */
+  --accent-green:    #4ade80;
+  --accent-yellow:   #facc15;
+  --accent-red:      #f87171;
+
+  --gradient-primary: linear-gradient(135deg, #6366f1, #a78bfa);
+  --gradient-hero:    linear-gradient(160deg, #0a0b14 0%, #1a1040 60%, #0a0b14 100%);
+
+  --text-primary:    #f1f5f9;
+  --text-secondary:  #94a3b8;
+  --text-muted:      #475569;
+
+  --radius-sm:   8px;
+  --radius-md:  14px;
+  --radius-lg:  20px;
+  --radius-xl:  28px;
+
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── 2. Base / Reset ───────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: var(--bg-deep);
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(99,102,241,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 80%, rgba(167,139,250,0.09) 0%, transparent 55%);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+/* ─── 3. Utility ─────────────────────────────────────────────────────────────── */
+.text-primary-accent { color: var(--accent-primary) !important; }
+.bg-primary-accent   { background: var(--gradient-primary) !important; }
+
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── 4. Navigation ──────────────────────────────────────────────────────────── */
+.glass-nav {
+  background: rgba(10, 11, 20, 0.80) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--glass-border);
+  padding: 0.85rem 0;
+}
+
+.brand-logo {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text-primary) !important;
+  text-decoration: none;
+}
+
+.glass-nav .nav-link {
+  color: var(--text-secondary) !important;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition), background var(--transition);
+  text-decoration: none;
+}
+.glass-nav .nav-link:hover,
+.glass-nav .nav-link.active {
+  color: var(--text-primary) !important;
+  background: rgba(99,102,241,0.15);
+}
+
+/* ─── 5. Hero Section ────────────────────────────────────────────────────────── */
+.hero-section {
+  padding-top: 4rem;
+  padding-bottom: 2rem;
+}
+.results-hero { padding-top: 2rem; padding-bottom: 1rem; }
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(99,102,241,0.15);
+  border: 1px solid rgba(99,102,241,0.35);
+  color: var(--accent-violet);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.9rem;
+  border-radius: 100px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -1px;
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 560px;
+  line-height: 1.7;
+}
+
+/* ─── 6. Glass Cards ─────────────────────────────────────────────────────────── */
+.glass-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.glass-card:hover {
+  border-color: rgba(99,102,241,0.3);
+  box-shadow: 0 12px 48px rgba(99,102,241,0.15);
+}
+
+.card-header-custom {
+  padding: 0.85rem 1.25rem;
+  background: rgba(255,255,255,0.04);
+  border-bottom: 1px solid var(--glass-border);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+}
+
+/* ─── 7. Form Inputs ─────────────────────────────────────────────────────────── */
+.label-custom {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.input-group-custom .input-group-text {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--glass-border);
+  border-right: none;
+  color: var(--accent-violet);
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+
+.custom-input {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid var(--glass-border) !important;
+  color: var(--text-primary) !important;
+  border-radius: var(--radius-sm) !important;
+  font-size: 0.9rem;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.custom-input:focus {
+  background: rgba(255,255,255,0.08) !important;
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.2) !important;
+  color: var(--text-primary) !important;
+  outline: none;
+}
+.custom-input option {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+/* Textarea specific */
+textarea.custom-input {
+  resize: vertical;
+  min-height: 90px;
+}
+
+/* Range slider */
+.custom-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.1);
+  outline: none;
+  width: 100%;
+  cursor: pointer;
+}
+.custom-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.3);
+  cursor: pointer;
+  transition: box-shadow var(--transition);
+}
+.custom-range::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 6px rgba(99,102,241,0.3);
+}
+
+.hours-badge {
+  background: var(--gradient-primary);
+  color: white;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.2rem 0.65rem;
+  border-radius: 100px;
+  letter-spacing: 0.3px;
+}
+
+/* Hint box */
+.hint-box {
+  background: rgba(99,102,241,0.07);
+  border: 1px solid rgba(99,102,241,0.2);
+  color: var(--text-secondary);
+}
+.hint-box code {
+  color: var(--accent-violet);
+  background: rgba(167,139,250,0.12);
+  padding: 0 4px;
+  border-radius: 3px;
+}
+
+/* ─── 8. Skill Tags (input preview) ─────────────────────────────────────────── */
+.skill-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 32px;
+}
+.skill-tag {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(99,102,241,0.15);
+  border: 1px solid rgba(99,102,241,0.35);
+  color: var(--accent-violet);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.2rem 0.6rem;
+  border-radius: 100px;
+  animation: tagIn 0.2s ease;
+}
+@keyframes tagIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ─── 9. Predict Button ──────────────────────────────────────────────────────── */
+.btn-predict {
+  background: var(--gradient-primary);
+  border: none;
+  color: white !important;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.75rem 2rem;
+  border-radius: var(--radius-md);
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.4);
+  transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+}
+.btn-predict:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(99,102,241,0.55);
+  opacity: 0.95;
+}
+.btn-predict:active { transform: translateY(0); }
+
+/* ─── 10. Stat Cards ─────────────────────────────────────────────────────────── */
+.stat-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  text-align: center;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+}
+.stat-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.4rem;
+  color: var(--accent-primary);
+}
+.stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+  letter-spacing: -1px;
+}
+.stat-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* ─── 11. Readiness Pill ─────────────────────────────────────────────────────── */
+.readiness-pill {
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.45rem 1.4rem;
+  border-radius: 100px;
+  color: white;
+  letter-spacing: 0.3px;
+}
+.readiness-pill.bg-success { background: linear-gradient(90deg,#16a34a,#4ade80) !important; }
+.readiness-pill.bg-warning { background: linear-gradient(90deg,#b45309,#facc15) !important; color: #111 !important; }
+.readiness-pill.bg-danger  { background: linear-gradient(90deg,#b91c1c,#f87171) !important; }
+
+/* ─── 12. Summary Items ──────────────────────────────────────────────────────── */
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--glass-border);
+  font-size: 0.85rem;
+}
+.summary-item:last-of-type { border-bottom: none; }
+.summary-key { color: var(--text-secondary); }
+.summary-val { font-weight: 600; color: var(--text-primary); }
+
+/* ─── 13. Table ──────────────────────────────────────────────────────────────── */
+.custom-table {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+.custom-table thead th {
+  background: rgba(255,255,255,0.04);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border-bottom: 1px solid var(--glass-border);
+  padding: 0.85rem 1rem;
+  white-space: nowrap;
+}
+.custom-table tbody td {
+  border-color: var(--glass-border);
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+}
+.custom-table tbody tr:hover td {
+  background: rgba(99,102,241,0.06);
+}
+.totals-row td {
+  background: rgba(99,102,241,0.1) !important;
+  border-top: 2px solid rgba(99,102,241,0.3);
+}
+
+/* Mini inline bar for table */
+.mini-bar {
+  height: 6px;
+  border-radius: 4px;
+  min-width: 4px;
+  opacity: 0.85;
+}
+
+/* ─── 14. Badges ─────────────────────────────────────────────────────────────── */
+.badge-difficulty {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.25rem 0.55rem;
+  border-radius: 5px;
+}
+.badge-match {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  color: white;
+}
+.badge-match.bg-warning { color: #111 !important; }
+
+/* ─── 15. Skill Pills ────────────────────────────────────────────────────────── */
+.skill-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 0.3rem 0.75rem;
+  border-radius: 100px;
+}
+.skill-known {
+  background: rgba(74,222,128,0.12);
+  border: 1px solid rgba(74,222,128,0.3);
+  color: var(--accent-green);
+}
+.skill-missing-sm {
+  background: rgba(248,113,113,0.1);
+  border: 1px solid rgba(248,113,113,0.25);
+  color: var(--accent-red);
+  font-size: 0.72rem;
+  padding: 0.15rem 0.5rem;
+}
+
+/* ─── 16. Empty State ────────────────────────────────────────────────────────── */
+.empty-state-icon {
+  font-size: 5rem;
+  color: var(--text-muted);
+  opacity: 0.4;
+}
+
+/* ─── 17. Footer ─────────────────────────────────────────────────────────────── */
+.footer-custom {
+  border-top: 1px solid var(--glass-border);
+  margin-top: 2rem;
+}
+
+/* ─── 18. Animations ─────────────────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+/* ─── 19. Scrollbar ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb {
+  background: rgba(99,102,241,0.4);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--accent-primary); }
+
+/* ─── 20. Company Strip (hero) ───────────────────────────────────────────────── */
+.company-strip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.company-chip {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.3rem 0.85rem;
+  border-radius: 100px;
+  letter-spacing: 0.5px;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+  cursor: default;
+}
+.company-chip:hover {
+  background: rgba(99, 102, 241, 0.18);
+  border-color: rgba(99, 102, 241, 0.45);
+  transform: translateY(-2px);
+}
+
+/* ─── 21. Responsive Tweaks ──────────────────────────────────────────────────── */
+@media (max-width: 576px) {
+  .hero-title { font-size: 1.8rem; }
+  .stat-value { font-size: 1.6rem; }
+}
