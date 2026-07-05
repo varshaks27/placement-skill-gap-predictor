@@ -72,6 +72,20 @@ This project solves that problem with a data-driven approach. It compares a stud
 - Built experience integrating Plotly visualizations into a Flask front end.
 - Improved understanding of database design for tracking historical predictions in SQLite.
 
+## Live Demo
+
+🌐 https://placement-skill-gap-predictor.onrender.com
+
+## Screenshots
+<img width="1852" height="897" alt="Screenshot 2026-07-05 102852" src="https://github.com/user-attachments/assets/979b7443-b824-4520-a351-660d7c7fd604" />
+<img width="1880" height="878" alt="Screenshot 2026-07-05 102909" src="https://github.com/user-attachments/assets/24f5ee5c-3fe8-4ed0-a290-fb183c06f273" />
+<img width="1858" height="777" alt="Screenshot 2026-07-05 102958" src="https://github.com/user-attachments/assets/e3ffd345-4df2-4440-9a70-1a340ea9a1c8" />
+<img width="1763" height="485" alt="Screenshot 2026-07-05 103051" src="https://github.com/user-attachments/assets/dbe7bb9b-d548-4de1-8147-c87fee26639d" />
+<img width="1745" height="642" alt="Screenshot 2026-07-05 103110" src="https://github.com/user-attachments/assets/73789db5-8334-4573-9696-68347b88a6e8" />
+<img width="1732" height="748" alt="Screenshot 2026-07-05 103123" src="https://github.com/user-attachments/assets/e7a6abfa-0886-41fe-91d2-583bf5ee9fd1" />
+<img width="1747" height="737" alt="Screenshot 2026-07-05 103134" src="https://github.com/user-attachments/assets/0f00398d-a0ae-423e-b4e0-4a38ee7868d9" />
+
+
 ---
 
 ## Future Enhancements
